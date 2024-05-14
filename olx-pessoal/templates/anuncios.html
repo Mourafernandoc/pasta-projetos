@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Anúncios</title>
+    </head>
+    <body>
+        <h1>Anuncios</h1>
+        <ul>
+            {% for anuncio in Anuncios %}
+                <li>{{anuncio.titulo}} - {{ anuncio.descricao }} - R$ {{ anuncio.preco }} </li>
+            {% endfor %}    
+        </ul>
+    </body>
+</html>    
