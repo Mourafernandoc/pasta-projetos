@@ -40,6 +40,9 @@ def test():
 def criar_anuncio():
     if request.method == 'POST':
         titulo = request.form['titulo']
+        #verifica o titulo
+        if Anuncio.query.filter_by(titulo=titulo).first():
+            return 'Já existe um anúncio com esse título'
         descricao = request.form['descricao']
         preco = request.form['preco']
         foto = None
@@ -56,6 +59,14 @@ def criar_anuncio():
         return redirect(url_for('listar_anuncios'))
     
     return render_template('criar_anuncio.html')
+
+@app.route('/editar_anuncio/<int:id>')
+def editar_anuncio(id):
+    return  'Editar anuncio com ID {}' .format(id)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 def salvar_imagem(arquivo):
     nome_arquivo = secure_filename(arquivo.filename)
