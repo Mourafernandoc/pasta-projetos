@@ -9,8 +9,14 @@
     <h1>Anúncios</h1>
     <ul>
         {% for anuncio in anuncios %}
-            <li>{{ anuncio.titulo }} - {{ anuncio.descricao }} - R$ {{ anuncio.preco }}</li>
+            <li>
+                <strong>{{ anuncio.titulo }}</strong> - {{ anuncio.descricao }} - R$ {{ anuncio.preco }}
+            {% if anuncio.foto %}
+                <img src="{{ url_for('static', filename=anuncio.foto) }}" alt="Foto do Anúncio" style="max-width: 200px; ">
+                {% endif %}
+            </li>
         {% endfor %}
     </ul>
+    <a href="/criar_anuncio"><button>Criar Anuncios</button></a>
 </body>
 </html>

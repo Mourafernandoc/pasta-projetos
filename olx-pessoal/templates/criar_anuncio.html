@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Anúncio</title>
+    <style>
+        .btn-criar{
+            background-color: #4caf50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Criar Novo Anúncio</h1>
+    <form action="criar_anuncio" method="POST" enctype="multipart/form-data">
+        <label for="titulo">Título:</label><br>
+        <input type="text" id="titulo" name="titulo" required ><br>
+
+        <label for="descricao">Descrição</label><br>
+        <textarea id="descricao" name="descricao" rows="4" cols="50" required></textarea><br>
+
+        <label for="preco">Preço:</label><br>
+        <input type="number" id="preco" name="preco" step="0.01" required><br>
+
+        <label for="foto">Foto:</label><br>
+        <input type="file" id="foto" name="foto" accept="image/*" required><br>
+
+        <button type="submit" class="btn-criar"Criar Anúncio></button>
+        
+    </form>
+</body>
+</html>
