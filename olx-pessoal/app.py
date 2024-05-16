@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+#from flask_migrate import Migration
 from werkzeug.utils import secure_filename
 import os
 
@@ -10,11 +11,12 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['UPLOAD_FOLDER'] = 'static/imagens'
 db = SQLAlchemy(app)
+#migrate = Migrate(app, db)#inicializa Flask-Migrate
 
 # Modelo de dados
 class Anuncio(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    titulo = db.Column(db.String(100), unique=True, nullable=False)
+    titulo = db.Column(db.String(100),  nullable=False)
     descricao = db.Column(db.Text, nullable=False)
     preco = db.Column(db.Float, nullable=False)
     foto = db.Column(db.String(20), nullable=False, default='default.jpg')
@@ -41,8 +43,8 @@ def criar_anuncio():
     if request.method == 'POST':
         titulo = request.form['titulo']
         #verifica o titulo
-        if Anuncio.query.filter_by(titulo=titulo).first():
-            return 'Já existe um anúncio com esse título'
+        #if Anuncio.query.filter_by(titulo=titulo).first():
+        #    return 'Já existe um anúncio com esse título'
         descricao = request.form['descricao']
         preco = request.form['preco']
         foto = None
@@ -60,13 +62,35 @@ def criar_anuncio():
     
     return render_template('criar_anuncio.html')
 
-@app.route('/editar_anuncio/<int:id>')
+@app.route('/editar_anuncio/<int:id>' , methods=['GET', 'POST'])
 def editar_anuncio(id):
-    return  'Editar anuncio com ID {}' .format(id)
+    anuncio = Anuncio.query.get_or_404(id)
+    if request.method == 'POST':
+        anuncio.titulo = request.form['titulo']
+        anuncio.descricao = request.form['descricao']
+        anuncio.preco = request.form['preco']
+        
+        if 'foto' in request.files:
+            arquivo = request.files['foto']
+            if arquivo.filename!= '':
+                anuncio.foto = salvar_imagem(arquivo)
+
+        db.session.commit()        
+        return  redirect(url_for('listar_anuncios'))
+
+    return render_template('editar_anuncio.html', anuncio=anuncio)
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route('/deletar_anuncio/<int:id>', methods=['POST'])
+def deletar_anuncio(id):
+    anuncio = Anuncio.query.get_or_404(id)
+    db.session.delete(anuncio)
+    db.session.commit()
+    return redirect(url_for('listar_anuncios'))
+
+
+#if __name__ == '__main__':
+#    app.run(debug=True)
 
 def salvar_imagem(arquivo):
     nome_arquivo = secure_filename(arquivo.filename)

@@ -32,41 +32,45 @@
             font-size: 14px;
             margin-bottom: 10px;
         }
-        .btn-editar,
-        .btn-deletar {
-            position: absolute;
-            bottom: 10px;
+        .btn-adicionar{
+            position: fixed;
+            top: 10px;
+            right: 10px;
             background-color: #4caf50;
             color: white;
-            padding: 5px 10px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn-editar, .btn-deletar{
+            position: absolute;
+            bottom: 10px;
+            padding: 5px 10px ;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 14px;
         }
+        .btn-editar {
+            background-color: #4caf50;
+            color: white;
+            left: 10px;        
+        }
+        
         .btn-deletar {
             right: 10px;
             background-color: #f44336;
-        }
-        .btn-editar {
-            left: 10px;
-        }
-        .btn-adicionar {
-            background-color: #4caf50;
             color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            position: fixed;
-            top: 20px;
-            right: 20px;
+            right: 10px;
         }
+        
     </style>
 </head>
 <body>
     <h1>Anúncios</h1>
+    <a href="{{ url_for('criar_anuncio') }}" class="btn-adicionar">Adicionar Anúncio</a>
     <div class="card-container">
         {% for anuncio in anuncios %}
             <div class="card">
@@ -75,10 +79,11 @@
                 <p>{{ anuncio.descricao }}</p>
                 <p>Preço: R$ {{ anuncio.preco }}</p>
                 <a href="{{ url_for('editar_anuncio', id=anuncio.id) }}" class="btn-editar">Editar</a>
-                <a href="{{ url_for('deletar_anuncio', id=anuncio.id) }}" class="btn-deletar">Deletar</a>
+                <form action="{{url_for('deletar_anuncio', id=anuncio.id)}}"method="post" style="display:inline;">
+                    <button type="submit" class="btn-deletar">Deletar</button>
+                </form>
             </div>
         {% endfor %}
     </div>
-    <a href="{{ url_for('criar_anuncio') }}" class="btn-adicionar">Adicionar Anúncio</a>
 </body>
 </html>
