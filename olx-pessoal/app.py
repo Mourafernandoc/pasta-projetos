@@ -1,17 +1,18 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-#from flask_migrate import Migration
+from flask_migrate import Migrate
 from werkzeug.utils import secure_filename
 import os
 
 
 app = Flask(__name__)
 
+
 # Configuração do banco de dados
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['UPLOAD_FOLDER'] = 'static/imagens'
 db = SQLAlchemy(app)
-#migrate = Migrate(app, db)#inicializa Flask-Migrate
+migrate = Migrate(app, db)#inicializa Flask-Migrate
 
 # Modelo de dados
 class Anuncio(db.Model):
@@ -43,8 +44,9 @@ def criar_anuncio():
     if request.method == 'POST':
         titulo = request.form['titulo']
         #verifica o titulo
-        #if Anuncio.query.filter_by(titulo=titulo).first():
-        #    return 'Já existe um anúncio com esse título'
+        if Anuncio.query.filter_by(titulo=titulo).first():
+            return 'Já existe um anúncio com esse título'
+        
         descricao = request.form['descricao']
         preco = request.form['preco']
         foto = None
@@ -66,6 +68,12 @@ def criar_anuncio():
 def editar_anuncio(id):
     anuncio = Anuncio.query.get_or_404(id)
     if request.method == 'POST':
+        novo_titulo = request.form['titulo']
+        # verifica se o novo titulo ja existe
+        if Anuncio.query.filter(Anuncio.titulo == novo_titulo, Anuncio.id != id).first():
+            return render_template('editar_anuncio.html', anuncio=anuncio, alerta="ja exite um anuncio com esse titulo")
+        
+
         anuncio.titulo = request.form['titulo']
         anuncio.descricao = request.form['descricao']
         anuncio.preco = request.form['preco']
@@ -89,8 +97,8 @@ def deletar_anuncio(id):
     return redirect(url_for('listar_anuncios'))
 
 
-#if __name__ == '__main__':
-#    app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
 
 def salvar_imagem(arquivo):
     nome_arquivo = secure_filename(arquivo.filename)
