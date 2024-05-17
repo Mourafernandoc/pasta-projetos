@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Anúncios</title>
+    <style>
+        .btn {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+        }
+        .btn-deletar {
+            background-color: #f44336;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gerenciar Anúncios</h1>
+    <ul>
+        {% for anuncio in anuncios %}
+            <li>
+                <h2>{{ anuncio.titulo }}</h2>
+                <a href="{{ url_for('editar_anuncio', id=anuncio.id) }}" class="btn">Editar</a>
+                <form action="{{ url_for('deletar_anuncio', id=anuncio.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-deletar">Deletar</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

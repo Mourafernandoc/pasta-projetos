@@ -1,38 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script>
-        // Função para exibir o alerta na tela
-        function mostrarAlerta(mensagem) {
-            var alerta = document.getElementById('alerta');
-            alerta.innerText = mensagem;
-            alerta.style.display = 'block';
-            // Fecha o alerta automaticamente após 10 segundos
-            setTimeout(function() {
-                alerta.style.display = 'none';
-            }, 15000);
-        }
-    
-        // Verifica se o alerta está definido na sessão e exibe-o
-        {% if alerta %}
-            mostrarAlerta("{{ alerta }}");
-        {% endif %}
-        
-        // Função para fechar o pop-up
-        function fecharPopup() {
-            var popup = document.getElementById("popup");
-            popup.style.display = "none";
-        }
-    </script>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Anúncio</title>
-
     <style>
-
-        .btn-voltar{
-            position:fixed;
+        .btn-voltar {
+            position: fixed;
             top: 20px;
             right: 20px;
             background-color: #4caf50;
@@ -63,6 +37,11 @@
             align-items: center;
         }
 
+        #popup-content p {
+            margin: 0;
+            padding-right: 20px;
+        }
+
         #popup-content button {
             background-color: #4caf50;
             color: white;
@@ -73,11 +52,29 @@
             font-size: 16px;
         }
     </style>
+    <script>
+        function mostrarAlerta(mensagem) {
+            var alerta = document.getElementById('alerta');
+            alerta.innerText = mensagem;
+            var popup = document.getElementById('popup');
+            popup.style.display = 'block';
+        }
+
+        function fecharPopup() {
+            var popup = document.getElementById('popup');
+            popup.style.display = 'none';
+        }
+
+        window.onload = function() {
+            {% if alerta %}
+                mostrarAlerta("{{ alerta }}");
+            {% endif %}
+        }
+    </script>
 </head>
 <body>
     <div id="popup">
         <div id="popup-content">
-            <span class="close" onclick="fecharPopup()">&times;</span>
             <p id="alerta"></p>
             <button onclick="fecharPopup()">OK</button>
         </div>
@@ -99,7 +96,7 @@
         <img src="{{ url_for('static', filename='imagens/' + anuncio.foto) }}" alt="{{ anuncio.titulo }}" style="width:100px; height:auto; margin-top:10px;"><br>
 
         <button type="submit" class="btn-salvar">Salvar Alterações</button>
-        <button class="btn-voltar" onclick="window.location.href='/anuncios'">Voltar</button>
+        <button type="button" class="btn-voltar" onclick="window.location.href='/anuncios'">Voltar</button>
     </form>
 </body>
 </html>

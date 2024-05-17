@@ -2,11 +2,20 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from werkzeug.utils import secure_filename
+from sqlalchemy.exc import IntegrityError
+
+import logging
 import os
 
 
 app = Flask(__name__)
 
+#configuração de logs
+logging.basicConfig(filename='system.log' , level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+#uso de logging
+logging.info('aplicação iniciada')
 
 # Configuração do banco de dados
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
@@ -39,14 +48,10 @@ def listar_anuncios():
 def test():
     return 'Teste de rota'
 
-@app.route('/criar_anuncio', methods=['GET' , 'POST'])
+@app.route('/criar_anuncio', methods=['GET', 'POST'])
 def criar_anuncio():
     if request.method == 'POST':
         titulo = request.form['titulo']
-        #verifica o titulo
-        if Anuncio.query.filter_by(titulo=titulo).first():
-            return 'Já existe um anúncio com esse título'
-        
         descricao = request.form['descricao']
         preco = request.form['preco']
         foto = None
@@ -57,36 +62,42 @@ def criar_anuncio():
                 foto = salvar_imagem(arquivo)
 
         novo_anuncio = Anuncio(titulo=titulo, descricao=descricao, preco=preco, foto=foto)
-        db.session.add(novo_anuncio)
-        db.session.commit()
+        try:
+            db.session.add(novo_anuncio)
+            db.session.commit()
+            logging.info(f'Anuncio criado: {titulo}')
+            return redirect(url_for('listar_anuncios'))
+        except IntegrityError:
+            db.session.rollback()
+            alerta = 'Já existe um anúncio com esse título'
+            return render_template('criar_anuncio.html', alerta=alerta)
 
-        return redirect(url_for('listar_anuncios'))
-    
     return render_template('criar_anuncio.html')
 
-@app.route('/editar_anuncio/<int:id>' , methods=['GET', 'POST'])
+
+@app.route('/editar_anuncio/<int:id>', methods=['GET', 'POST'])
 def editar_anuncio(id):
     anuncio = Anuncio.query.get_or_404(id)
     if request.method == 'POST':
-        novo_titulo = request.form['titulo']
-        # verifica se o novo titulo ja existe
-        if Anuncio.query.filter(Anuncio.titulo == novo_titulo, Anuncio.id != id).first():
-            return render_template('editar_anuncio.html', anuncio=anuncio, alerta="ja exite um anuncio com esse titulo")
-        
-
         anuncio.titulo = request.form['titulo']
         anuncio.descricao = request.form['descricao']
         anuncio.preco = request.form['preco']
         
         if 'foto' in request.files:
             arquivo = request.files['foto']
-            if arquivo.filename!= '':
+            if arquivo.filename != '':
                 anuncio.foto = salvar_imagem(arquivo)
 
-        db.session.commit()        
-        return  redirect(url_for('listar_anuncios'))
+        try:
+            db.session.commit()
+            return redirect(url_for('listar_anuncios'))
+        except IntegrityError:
+            db.session.rollback()
+            alerta = 'Já existe um anúncio com esse título'
+            return render_template('editar_anuncio.html', anuncio=anuncio, alerta=alerta)
 
     return render_template('editar_anuncio.html', anuncio=anuncio)
+
 
 
 @app.route('/deletar_anuncio/<int:id>', methods=['POST'])
@@ -96,6 +107,24 @@ def deletar_anuncio(id):
     db.session.commit()
     return redirect(url_for('listar_anuncios'))
 
+@app.route('/gerenciar_anuncios')
+def gerenciar_anuncios():
+    anuncios = Anuncio.query.all()
+    return render_template('gerenciar_anuncios.html', anuncios=anuncios)
+
+@app.route('/ver_logs')
+def ver_logs():
+    try:
+        with open('system.log', 'r') as file:
+            conteudo = file.readlines()
+        logs = conteudo    
+    except FileNotFoundError:
+        logs = ["Log file not found."]
+    return render_template('logs.html', logs=logs)
+
+@app.route('/controle')
+def controle():
+    return render_template('controle.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

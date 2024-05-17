@@ -44,6 +44,11 @@
             cursor: pointer;
             font-size: 16px;
         }
+        .btn-controle{
+            right: 150px;
+            background-color: #007bff;
+            color: white;
+        }
         .btn-editar, .btn-deletar{
             position: absolute;
             bottom: 10px;
@@ -71,6 +76,7 @@
 <body>
     <h1>Anúncios</h1>
     <a href="{{ url_for('criar_anuncio') }}" class="btn-adicionar">Adicionar Anúncio</a>
+    <a href="{{url_for('controle')}}" class="btn-controle">Controle</a>
     <div class="card-container">
         {% for anuncio in anuncios %}
             <div class="card">
