@@ -1,95 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anúncios</title>
-    <style>
-        .card-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-        }
-        .card {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 20px;
-            width: 300px; /* Defina a largura do card conforme necessário */
-            position: relative;
-        }
-        .card img {
-            width: 100%;
-            height: auto;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-        .card h2 {
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
-        .card p {
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        .btn-adicionar{
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background-color: #4caf50;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .btn-controle{
-            right: 150px;
-            background-color: #007bff;
-            color: white;
-        }
-        .btn-editar, .btn-deletar{
-            position: absolute;
-            bottom: 10px;
-            padding: 5px 10px ;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .btn-editar {
-            background-color: #4caf50;
-            color: white;
-            left: 10px;        
-        }
-        
-        .btn-deletar {
-            right: 10px;
-            background-color: #f44336;
-            color: white;
-            right: 10px;
-        }
-        
-    </style>
+    <title>Casa do Controle</title>
+    <link rel="icon" href="/static/imagens/logo.jpg" type="image/png">
+    <link rel="stylesheet" href="style.css">
 </head>
+
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #ffffff;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 10px 20px;
+    color: rgb(255, 255, 255);
+}
+
+.logo img {
+    height: 40px;
+}
+
+.search-bar {
+    flex-grow: 1;
+    margin: 0 20px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ccc; 
+    border-radius: 10px;
+    background-color: white;
+    color: #333;
+    box-sizing: border-box; 
+}
+
+.search-bar input:focus {
+    border-color: #007bff; 
+    outline: none; 
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-edit {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+.btn-edit:hover {
+    background-color: #0056b3;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+a {
+    text-decoration: none;
+}
+
+.btn-adicionar, .btn-controle {
+    display: inline-block;
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.btn-controle {
+    background-color: #007bff;
+}
+
+.btn-adicionar:hover, .btn-controle:hover {
+    background-color: #218838;
+}
+
+.btn-controle:hover {
+    background-color: #0056b3;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    padding: 20px;
+    text-align: center;
+}
+
+.card img {
+    max-width: 100%;
+    border-radius: 5px;
+}
+
+.card h2 {
+    color: #333;
+    margin: 10px 0;
+}
+
+.card p {
+    color: #666;
+    margin: 10px 0;
+}
+
+.btn-editar, .btn-deletar {
+    display: inline-block;
+    margin: 10px 5px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+.btn-editar {
+    background-color: #ffc107;
+}
+
+.btn-deletar {
+    background-color: #dc3545;
+}
+
+.btn-editar:hover {
+    background-color: #e0a800;
+}
+
+.btn-deletar:hover {
+    background-color: #c82333;
+}
+.card img.imgControl {
+    max-width: 300px;
+    max-height: 300px;
+    border-radius: 5px;
+}
+
+</style>
+
 <body>
-    <h1>Anúncios</h1>
-    <a href="{{ url_for('criar_anuncio') }}" class="btn-adicionar">Adicionar Anúncio</a>
-    <a href="{{url_for('controle')}}" class="btn-controle">Controle</a>
+    <!-- cabeçalho-->
+    <header>
+        <div class="logo">
+            <img src="/static/imagens/logo.jpg" alt="Logo">
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Pesquisar...">
+        </div>
+        <div class="buttons">
+            <a href="{{ url_for('criar_anuncio') }}" class="btn-adicionar">Anunciar</a>
+            <a href="{{url_for('controle')}}" class="btn-controle">Entrar</a>
+        </div>
+    </header>
+    
     <div class="card-container">
         {% for anuncio in anuncios %}
-            <div class="card">
-                <h2>{{ anuncio.titulo }}</h2>
-                <img src="{{ url_for('static', filename='imagens/' + anuncio.foto) }}" alt="{{ anuncio.titulo }}">
-                <p>{{ anuncio.descricao }}</p>
-                <p>Preço: R$ {{ anuncio.preco }}</p>
-                <a href="{{ url_for('editar_anuncio', id=anuncio.id) }}" class="btn-editar">Editar</a>
-                <form action="{{url_for('deletar_anuncio', id=anuncio.id)}}"method="post" style="display:inline;">
-                    <button type="submit" class="btn-deletar">Deletar</button>
-                </form>
-            </div>
+        <div class="card">
+            <h2>{{ anuncio.titulo }}</h2>
+            <img src="{{ url_for('static', filename='imagens/' + anuncio.foto) }}" class="imgControl" alt="{{ anuncio.titulo }}">
+            <p>{{ anuncio.descricao }}</p>
+            <p>Preço: R$ {{ anuncio.preco }}</p>
+            <a href="{{ url_for('editar_anuncio', id=anuncio.id) }}" class="btn-editar">Editar</a>
+            <form action="{{url_for('deletar_anuncio', id=anuncio.id)}}" method="post" style="display:inline;">
+                <button type="submit" class="btn-deletar">Deletar</button>
+            </form>
+        </div>
         {% endfor %}
     </div>
 </body>
+
 </html>
