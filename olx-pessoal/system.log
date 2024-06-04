@@ -1299,3 +1299,26 @@
 2024-05-23 19:55:03,620 - INFO - 127.0.0.1 - - [23/May/2024 19:55:03] "[36mGET /static/imagens/controle_xbox360_max-ct23.png HTTP/1.1[0m" 304 -
 2024-05-23 19:55:03,621 - INFO - 127.0.0.1 - - [23/May/2024 19:55:03] "[36mGET /static/imagens/controle-xbox-360.jpg HTTP/1.1[0m" 304 -
 2024-05-23 19:55:03,624 - INFO - 127.0.0.1 - - [23/May/2024 19:55:03] "[36mGET /static/imagens/all-games_wall_paper.jpg HTTP/1.1[0m" 304 -
+2024-06-02 22:15:25,978 - INFO - aplicação iniciada
+2024-06-02 22:15:26,263 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-06-02 22:15:26,264 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-02 22:15:26,274 - INFO -  * Restarting with stat
+2024-06-02 22:15:26,953 - INFO - aplicação iniciada
+2024-06-02 22:15:26,982 - WARNING -  * Debugger is active!
+2024-06-02 22:15:26,982 - INFO -  * Debugger PIN: 702-183-929
+2024-06-02 22:15:40,817 - INFO - 127.0.0.1 - - [02/Jun/2024 22:15:40] "GET /anuncios HTTP/1.1" 200 -
+2024-06-02 22:15:40,877 - INFO - 127.0.0.1 - - [02/Jun/2024 22:15:40] "[33mGET /style.css HTTP/1.1[0m" 404 -
+2024-06-02 22:15:41,129 - INFO - 127.0.0.1 - - [02/Jun/2024 22:15:41] "GET /static/imagens/logo.jpg HTTP/1.1" 200 -
+2024-06-02 22:15:41,196 - INFO - 127.0.0.1 - - [02/Jun/2024 22:15:41] "GET /static/imagens/controle_xbox360_max-ct23.png HTTP/1.1" 200 -
+2024-06-02 22:15:41,220 - INFO - 127.0.0.1 - - [02/Jun/2024 22:15:41] "GET /static/imagens/controle-xbox-360.jpg HTTP/1.1" 200 -
+2024-06-02 22:15:41,222 - INFO - 127.0.0.1 - - [02/Jun/2024 22:15:41] "GET /static/imagens/all-games_wall_paper.jpg HTTP/1.1" 200 -
+2024-06-02 22:15:41,572 - INFO - 127.0.0.1 - - [02/Jun/2024 22:15:41] "[36mGET /static/imagens/logo.jpg HTTP/1.1[0m" 304 -
+2024-06-02 22:16:37,600 - INFO - 127.0.0.1 - - [02/Jun/2024 22:16:37] "[33mGET /style.css HTTP/1.1[0m" 404 -
+2024-06-02 22:20:09,950 - INFO - 127.0.0.1 - - [02/Jun/2024 22:20:09] "GET /anuncios HTTP/1.1" 200 -
+2024-06-02 22:20:09,971 - INFO - 127.0.0.1 - - [02/Jun/2024 22:20:09] "[33mGET /style.css HTTP/1.1[0m" 404 -
+2024-06-02 22:20:10,195 - INFO - 127.0.0.1 - - [02/Jun/2024 22:20:10] "GET /static/imagens/logo.png HTTP/1.1" 200 -
+2024-06-02 22:20:10,283 - INFO - 127.0.0.1 - - [02/Jun/2024 22:20:10] "[36mGET /static/imagens/controle_xbox360_max-ct23.png HTTP/1.1[0m" 304 -
+2024-06-02 22:20:10,301 - INFO - 127.0.0.1 - - [02/Jun/2024 22:20:10] "[36mGET /static/imagens/controle-xbox-360.jpg HTTP/1.1[0m" 304 -
+2024-06-02 22:20:10,302 - INFO - 127.0.0.1 - - [02/Jun/2024 22:20:10] "[36mGET /static/imagens/all-games_wall_paper.jpg HTTP/1.1[0m" 304 -
+2024-06-02 22:20:10,632 - INFO - 127.0.0.1 - - [02/Jun/2024 22:20:10] "[33mGET /static/imagens/logo.jpg HTTP/1.1[0m" 404 -
