@@ -1299,6 +1299,7 @@
 2024-05-23 19:55:03,620 - INFO - 127.0.0.1 - - [23/May/2024 19:55:03] "[36mGET /static/imagens/controle_xbox360_max-ct23.png HTTP/1.1[0m" 304 -
 2024-05-23 19:55:03,621 - INFO - 127.0.0.1 - - [23/May/2024 19:55:03] "[36mGET /static/imagens/controle-xbox-360.jpg HTTP/1.1[0m" 304 -
 2024-05-23 19:55:03,624 - INFO - 127.0.0.1 - - [23/May/2024 19:55:03] "[36mGET /static/imagens/all-games_wall_paper.jpg HTTP/1.1[0m" 304 -
+<<<<<<< HEAD
 2024-06-02 22:15:25,978 - INFO - aplicação iniciada
 2024-06-02 22:15:26,263 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
  * Running on http://127.0.0.1:5000
@@ -1322,3 +1323,49 @@
 2024-06-02 22:20:10,301 - INFO - 127.0.0.1 - - [02/Jun/2024 22:20:10] "[36mGET /static/imagens/controle-xbox-360.jpg HTTP/1.1[0m" 304 -
 2024-06-02 22:20:10,302 - INFO - 127.0.0.1 - - [02/Jun/2024 22:20:10] "[36mGET /static/imagens/all-games_wall_paper.jpg HTTP/1.1[0m" 304 -
 2024-06-02 22:20:10,632 - INFO - 127.0.0.1 - - [02/Jun/2024 22:20:10] "[33mGET /static/imagens/logo.jpg HTTP/1.1[0m" 404 -
+=======
+2024-06-03 21:23:51,880 - INFO - aplicação iniciada
+2024-06-03 21:24:11,671 - INFO - aplicação iniciada
+2024-06-03 21:24:11,732 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-06-03 21:24:11,732 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-03 21:24:11,732 - INFO -  * Restarting with stat
+2024-06-03 21:24:12,384 - INFO - aplicação iniciada
+2024-06-03 21:24:12,416 - WARNING -  * Debugger is active!
+2024-06-03 21:24:12,416 - INFO -  * Debugger PIN: 867-922-749
+2024-06-03 21:30:32,835 - INFO - 127.0.0.1 - - [03/Jun/2024 21:30:32] "GET /anuncios HTTP/1.1" 200 -
+2024-06-03 21:30:32,876 - INFO - 127.0.0.1 - - [03/Jun/2024 21:30:32] "[33mGET /style.css HTTP/1.1[0m" 404 -
+2024-06-03 21:30:33,112 - INFO - 127.0.0.1 - - [03/Jun/2024 21:30:33] "GET /static/imagens/logo.png HTTP/1.1" 200 -
+2024-06-03 21:30:33,216 - INFO - 127.0.0.1 - - [03/Jun/2024 21:30:33] "GET /static/imagens/all-games_wall_paper.jpg HTTP/1.1" 200 -
+2024-06-03 21:30:33,216 - INFO - 127.0.0.1 - - [03/Jun/2024 21:30:33] "GET /static/imagens/controle-xbox-360.jpg HTTP/1.1" 200 -
+2024-06-03 21:30:33,475 - INFO - 127.0.0.1 - - [03/Jun/2024 21:30:33] "GET /static/imagens/controle_xbox360_max-ct23.png HTTP/1.1" 200 -
+2024-06-03 21:30:33,795 - INFO - 127.0.0.1 - - [03/Jun/2024 21:30:33] "[33mGET /static/imagens/logo.jpg HTTP/1.1[0m" 404 -
+2024-06-03 21:30:43,979 - INFO - 127.0.0.1 - - [03/Jun/2024 21:30:43] "GET /controle HTTP/1.1" 200 -
+2024-06-03 21:30:44,282 - INFO - 127.0.0.1 - - [03/Jun/2024 21:30:44] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2024-06-03 21:39:32,093 - WARNING -  * Debugger is active!
+2024-06-03 21:39:32,093 - INFO -  * Debugger PIN: 867-922-749
+2024-06-03 21:39:32,250 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-06-03 21:39:32,250 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-03 21:39:32,250 - INFO -  * Restarting with stat
+2024-06-03 21:39:33,058 - INFO - aplicação iniciada
+2024-06-03 21:39:33,105 - WARNING -  * Debugger is active!
+2024-06-03 21:39:33,107 - INFO -  * Debugger PIN: 867-922-749
+2024-06-03 21:39:34,676 - WARNING -  * Debugger is active!
+2024-06-03 21:39:34,676 - INFO -  * Debugger PIN: 867-922-749
+2024-06-03 21:41:40,052 - INFO - aplicação iniciada
+2024-06-03 21:41:40,099 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-06-03 21:41:40,099 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-03 21:41:40,100 - INFO -  * Restarting with stat
+2024-06-03 21:41:40,912 - INFO - aplicação iniciada
+2024-06-03 21:41:40,942 - WARNING -  * Debugger is active!
+2024-06-03 21:41:40,947 - INFO -  * Debugger PIN: 867-922-749
+2024-06-03 21:41:46,501 - WARNING -  * Debugger is active!
+2024-06-03 21:41:46,501 - INFO -  * Debugger PIN: 867-922-749
+2024-06-03 21:41:46,620 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-06-03 21:41:46,620 - INFO - [33mPress CTRL+C to quit[0m
+2024-06-03 21:41:46,620 - INFO -  * Restarting with stat
+2024-06-03 21:41:47,426 - INFO - aplicação iniciada
+>>>>>>> 35a8776a4aed73dd5a4ff8ea226916591057aa12

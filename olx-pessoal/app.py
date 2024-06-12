@@ -3,7 +3,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from werkzeug.utils import secure_filename
 from sqlalchemy.exc import IntegrityError
-
+from flask_login import UserMixin, LoginManager, Login_user, Login_required, logout_user, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask import flash, session
 import logging
 import os
 
@@ -23,6 +25,30 @@ app.config['UPLOAD_FOLDER'] = 'static/imagens'
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)#inicializa Flask-Migrate
 
+#configuração do login
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+#modelo de usuario
+
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150), unique=True, nullable=False)
+    email = db.Column(db.String(150), unique=True, nullable=False)
+    password = db.Column(db.String(150), nullable=False)
+
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
 # Modelo de dados
 class Anuncio(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -35,6 +61,56 @@ class Anuncio(db.Model):
         return f"Anuncio('{self.titulo}', '{self.descricao}', '{self.preco}', '{self.foto}')"
 
 # Rotas
+
+@app.route('/register', methods=['GET','POST'])
+def register():
+    if request.methode == 'POST':
+        username = request.form.get['username']
+        email = request.form.get['email']
+        password = request.form.get['password']
+
+        #verifica se o usuario ja existe
+        if Usuario.query.filter_by(username=username).first():
+            flash('Username já existe. Por favor, escolha outro.', 'danger')
+            return redirect(url_for('register'))
+        
+        #criar o novo usuario
+        novo_usuario = Usuario(username=username, email=email)
+        novo_usuario.set_password(password)
+        db.session.add(novo_usuario)
+        db.session.commit()
+
+        flash('Registro bem-sucedido! Você pode fazer login agora.','sucess')
+        return redirect(url_for('login'))
+    
+    return render_template('register.html')
+
+@app.route('/login', methods=['GET','POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get['username']
+        password = request.form.get['password']
+
+        usuario = Usuario.query.filter_by(username=username).first()
+
+        if usuario is None or not usuario.check_password(password):
+            flash('Nome de usuario ou senha incorretos.','danger')
+            return redirect(url_for('login'))
+        
+        login_user(usuario)
+        flash('Login bem-sucedido!', 'sucess')
+        return redirect(url_for('listar_anuncios'))
+    
+    return render_template('login.html')
+
+@app.route('/logout')
+@Login_required
+def logout():
+    logout_user()
+    flash('Você foi desconectado.','info')
+    return redirect(url_for('login'))
+
+
 @app.route('/')
 def index():
     return 'Olá, mundo! Este é o meu clone da OLX.'
