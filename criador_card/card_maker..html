@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Card de Jogo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+        }
+        .container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, 
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group input[type="number"] {
+            max-width: 100px;
+        }
+        .form-group input[type="file"] {
+            padding: 3px;
+        }
+        .form-group textarea {
+            resize: vertical;
+        }
+        .form-group .stats {
+            display: flex;
+            justify-content: space-between;
+        }
+        .form-group .stats input {
+            width: calc(50% - 10px);
+        }
+        .form-group .stats input:last-child {
+            margin-left: 10px;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .card-preview {
+            width: 63mm;
+            height: 88mm;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 5px;
+            box-sizing: border-box;
+            position: relative;
+        }
+        .card-preview .details {
+            padding: 10px;
+            box-sizing: border-box;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+        .card-preview img {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            cursor: move;
+        }
+        .card-preview h3 {
+            font-size: 14px;
+            margin: 0;
+            text-align: left;
+            cursor: move;
+        }
+        .card-preview p {
+            font-size: 12px;
+            margin: 5px 0;
+            cursor: move;
+        }
+        .card-preview .stats {
+            font-size: 12px;
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .card-preview .stats div {
+            width: 50%;
+            box-sizing: border-box;
+            cursor: move;
+        }
+        .card-preview .stats div p {
+            margin: 5px 0;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h2>Criar Card de Jogo</h2>
+    <form id="card-form">
+        <div class="form-group">
+            <label for="title">Título do Card:</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="photo">Foto do Card:</label>
+            <input type="file" id="photo" name="photo" accept="image/*" required>
+        </div>
+        <div class="form-group">
+            <label for="info">Informações do Card:</label>
+            <textarea id="info" name="info" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+            <div class="stats">
+                <div>
+                    <label for="attack">Ataque:</label>
+                    <input type="number" id="attack" name="attack" min="0" required>
+                </div>
+                <div>
+                    <label for="defense">Defesa:</label>
+                    <input type="number" id="defense" name="defense" min="0" required>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="stats">
+                <div>
+                    <label for="special-attack">Ataque Especial:</label>
+                    <input type="number" id="special-attack" name="special-attack" min="0" required>
+                </div>
+                <div>
+                    <label for="hp">Pontos de Vitalidade:</label>
+                    <input type="number" id="hp" name="hp" min="0" required>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn">Criar Card</button>
+    </form>
+    <div class="card-preview" id="card-preview" style="display: none;">
+        <h3 id="card-title"></h3>
+        <img id="card-image" src="" alt="Imagem do Card">
+        <div class="details">
+            <p id="card-info"></p>
+            <div class="stats">
+                <div>
+                    <p><strong>Ataque:</strong> <span id="card-attack"></span></p>
+                    <p><strong>Defesa:</strong> <span id="card-defense"></span></p>
+                </div>
+                <div>
+                    <p><strong>Ataque Especial:</strong> <span id="card-special-attack"></span></p>
+                    <p><strong>HP:</strong> <span id="card-hp"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('card-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const title = document.getElementById('title').value;
+        const photo = document.getElementById('photo').files[0];
+        const info = document.getElementById('info').value;
+        const attack = document.getElementById('attack').value;
+        const defense = document.getElementById('defense').value;
+        const specialAttack = document.getElementById('special-attack').value;
+        const hp = document.getElementById('hp').value;
+
+        if (photo) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('card-image').src = e.target.result;
+            };
+            reader.readAsDataURL(photo);
+        }
+
+        document.getElementById('card-title').textContent = title;
+        document.getElementById('card-info').textContent = info;
+        document.getElementById('card-attack').textContent = attack;
+        document.getElementById('card-defense').textContent = defense;
+        document.getElementById('card-special-attack').textContent = specialAttack;
+        document.getElementById('card-hp').textContent = hp;
+
+        document.getElementById('card-preview').style.display = 'block';
+    });
+
+    interact('.card-preview img, .card-preview h3, .card-preview p, .card-preview .stats div')
+        .draggable({
+            onmove: function(event) {
+                const target = event.target;
+                const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+                const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+                target.style.transform = `translate(${x}px, ${y}px)`;
+                target.setAttribute('data-x', x);
+                target.setAttribute('data-y', y);
+            }
+        })
+        .resizable({
+            edges: { left: true, right: true, bottom: true, top: true }
+        })
+        .on('resizemove', function(event) {
+            const target = event.target;
+            let x = (parseFloat(target.getAttribute('data-x')) || 0);
+            let y = (parseFloat(target.getAttribute('data-y')) || 0);
+
+            target.style.width = `${event.rect.width}px`;
+            target.style.height = `${event.rect.height}px`;
+
+            x += event.deltaRect.left;
+            y += event.deltaRect.top;
+
+            target.style.transform = `translate(${x}px, ${y}px)`;
+            target.setAttribute('data-x', x);
+            target.setAttribute('data-y', y);
+        });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Site Pessoal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        form, .section-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+        .section-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .section-list li {
+            background-color: #fff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+<h1>Gerador de Site Pessoal</h1>
+
+<!-- Formulário principal -->
+<form id="siteForm">
+    <div class="form-group">
+        <label for="name">Nome Completo:</label>
+        <input type="text" id="name" name="name" required>
+    </div>
+    <div class="form-group">
+        <label for="profession">Profissão/Área de Atuação:</label>
+        <input type="text" id="profession" name="profession" required>
+    </div>
+    <div class="form-group">
+        <label for="bio">Biografia:</label>
+        <textarea id="bio" name="bio" rows="4" required></textarea>
+    </div>
+    <div class="form-group">
+        <label for="textColor">Cor do Texto:</label>
+        <select id="textColor" name="textColor">
+            <option value="#000000">Preto</option>
+            <option value="#FFFFFF">Branco</option>
+            <option value="#FF0000">Vermelho</option>
+            <option value="#00FF00">Verde</option>
+            <option value="#0000FF">Azul</option>
+            <!-- SE NECESSARIO ADIOCE MAIS CORES -->
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="backgroundColor">Cor do Fundo:</label>
+        <select id="backgroundColor" name="backgroundColor">
+            <option value="#FFFFFF">Branco</option>
+            <option value="#000000">Preto</option>
+            <option value="#FF0000">Vermelho</option>
+            <option value="#00FF00">Verde</option>
+            <option value="#0000FF">Azul</option>
+            <!-- SE NECESSARIO ADIOCE MAIS CORES -->
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="profilePic">Foto de Perfil:</label>
+        <input type="file" id="profilePic" name="profilePic" accept="image/*">
+    </div>
+    <div class="form-group">
+        <button type="button" onclick="nextStep()">Próximo Passo</button>
+    </div>
+</form>
+
+<!-- Formulário de seções -->
+<div id="sectionForm" style="display: none;">
+    <h2>Adicionar Seções</h2>
+    <form class="section-form">
+        <div class="form-group">
+            <label for="sectionName">Nome da Seção:</label>
+            <input type="text" id="sectionName" name="sectionName" required>
+        </div>
+        <div class="form-group">
+            <label for="sectionType">Tipo de Seção:</label>
+            <select id="sectionType" name="sectionType" onchange="handleSectionTypeChange()">
+                <option value="text">Texto</option>
+                <option value="photos">Fotos</option>
+                <option value="portfolio">Portfólio</option>
+            </select>
+        </div>
+        <div class="form-group" id="sectionContent">
+            <label for="sectionContentText">Conteúdo da Seção:</label>
+            <textarea id="sectionContentText" name="sectionContentText" rows="4"></textarea>
+        </div>
+        <div class="form-group" id="photoUpload" style="display: none;">
+            <label for="photos">Carregar Fotos:</label>
+            <input type="file" id="photos" name="photos" multiple>
+        </div>
+        <div class="form-group">
+            <button type="button" onclick="addSection()">Adicionar Seção</button>
+        </div>
+    </form>
+    <ul class="section-list" id="sectionList"></ul>
+    <div class="form-group">
+        <button type="button" onclick="generateSite()">Gerar Site</button>
+    </div>
+</div>
+
+<script>
+let sections = [];
+
+function nextStep() {
+    document.getElementById('siteForm').style.display = 'none';
+    document.getElementById('sectionForm').style.display = 'block';
+}
+
+function handleSectionTypeChange() {
+    const sectionType = document.getElementById('sectionType').value;
+    if (sectionType === 'photos' || sectionType === 'portfolio') {
+        document.getElementById('photoUpload').style.display = 'block';
+        document.getElementById('sectionContent').style.display = 'none';
+    } else {
+        document.getElementById('photoUpload').style.display = 'none';
+        document.getElementById('sectionContent').style.display = 'block';
+    }
+}
+
+function addSection() {
+    const sectionName = document.getElementById('sectionName').value;
+    const sectionType = document.getElementById('sectionType').value;
+    const sectionContentText = document.getElementById('sectionContentText').value;
+    const photos = document.getElementById('photos').files;
+    
+    let sectionContent = '';
+    if (sectionType === 'photos' || sectionType === 'portfolio') {
+        sectionContent = [];
+        for (let i = 0; i < photos.length; i++) {
+            sectionContent.push(URL.createObjectURL(photos[i]));
+        }
+    } else {
+        sectionContent = sectionContentText;
+    }
+
+    sections.push({ name: sectionName, type: sectionType, content: sectionContent });
+
+    updateSectionList();
+    document.querySelector('.section-form').reset();
+    handleSectionTypeChange();
+}
+
+function updateSectionList() {
+    const sectionList = document.getElementById('sectionList');
+    sectionList.innerHTML = '';
+    sections.forEach((section, index) => {
+        const li = document.createElement('li');
+        li.textContent = `${section.name} (${section.type})`;
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Remover';
+        removeButton.onclick = () => removeSection(index);
+        li.appendChild(removeButton);
+        sectionList.appendChild(li);
+    });
+}
+
+function removeSection(index) {
+    sections.splice(index, 1);
+    updateSectionList();
+}
+
+// Alteração na função generateSite (a partir da linha 124)
+function generateSite() {
+    const name = document.getElementById('name').value;
+    const profession = document.getElementById('profession').value;
+    const bio = document.getElementById('bio').value;
+    const textColor = document.getElementById('textColor').value;
+    const backgroundColor = document.getElementById('backgroundColor').value;
+    const profilePicFile = document.getElementById('profilePic').files[0];
+
+    let profilePicURL = '';
+    if (profilePicFile) {
+        profilePicURL = URL.createObjectURL(profilePicFile);
+    }
+
+    let sectionHTML = '';
+    sections.forEach(section => {
+        sectionHTML += `<h2>${section.name}</h2>`;
+        if (section.type === 'text') {
+            sectionHTML += `<p>${section.content}</p>`;
+        } else if (section.type === 'photos' || section.type === 'portfolio') {
+            section.content.forEach(photo => {
+                sectionHTML += `<img src="${photo}" alt="${section.name}" style="width:150px; margin:10px;">`;
+            });
+        }
+    });
+
+    const siteHTML = `
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Pessoal de ${name}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: ${backgroundColor};
+            color: ${textColor};
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        header img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+        }
+        section {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        ${profilePicURL ? `<img src="${profilePicURL}" alt="Foto de Perfil">` : ''}
+        <h1>${name}</h1>
+        <h2>${profession}</h2>
+    </header>
+    <section>
+        <h2>Biografia</h2>
+        <p>${bio}</p>
+    </section>
+    ${sectionHTML}
+    <button onclick="downloadSite()">Salvar Site</button>
+</body>
+</html>`;
+
+    const newWindow = window.open();
+    newWindow.document.write(siteHTML);
+    newWindow.document.close();
+    
+    // Função para salvar o site
+    newWindow.downloadSite = function() {
+        const blob = new Blob([siteHTML], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `site_${name.toLowerCase().replace(/\s/g, '_')}.html`;
+        a.click();
+        URL.revokeObjectURL(url);
+    };
+}
+
+
+</script>
+
+</body>
+</html>
