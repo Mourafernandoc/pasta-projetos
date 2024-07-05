@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from werkzeug.utils import secure_filename
 from sqlalchemy.exc import IntegrityError
-from flask_login import UserMixin, LoginManager, Login_user, Login_required, logout_user, current_user
+from flask_login import UserMixin, LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import flash, session
 import logging
@@ -104,7 +104,7 @@ def login():
     return render_template('login.html')
 
 @app.route('/logout')
-@Login_required
+@login_required
 def logout():
     logout_user()
     flash('Você foi desconectado.','info')
