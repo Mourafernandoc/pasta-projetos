@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Printer Status Monitor</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        table, th, td { border: 1px solid black; }
+        th, td { padding: 10px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>Printer Status Monitor</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>IP Address</th>
+                <th>Status</th>
+                <th>Message</th>
+            </tr>
+        </thead>
+        <tbody id="printer-statuses">
+            <!-- Printer statuses will be inserted here -->
+        </tbody>
+    </table>
+
+    <script>
+        async function fetchPrinterStatuses() {
+            const response = await fetch('/api/printers');
+            const printers = await response.json();
+
+            const tbody = document.getElementById('printer-statuses');
+            tbody.innerHTML = '';
+
+            printers.forEach(printer => {
+                const row = document.createElement('tr');
+                const nameCell = document.createElement('td');
+                nameCell.textContent = printer.name;
+                const ipCell = document.createElement('td');
+                ipCell.textContent = printer.ip;
+                const statusCell = document.createElement('td');
+                statusCell.textContent = printer.status.status;
+                const messageCell = document.createElement('td');
+                messageCell.textContent = printer.status.message;
+                row.appendChild(nameCell);
+                row.appendChild(ipCell);
+                row.appendChild(statusCell);
+                row.appendChild(messageCell);
+                tbody.appendChild(row);
+            });
+        }
+
+        // Fetch printer statuses when the page loads
+        window.onload = fetchPrinterStatuses;
+    </script>
+</body>
+</html>

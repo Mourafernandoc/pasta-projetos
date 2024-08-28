@@ -1,192 +1,98 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from werkzeug.utils import secure_filename
 from sqlalchemy.exc import IntegrityError
 from flask_login import UserMixin, LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import flash, session
 import logging
 import os
 
-
 app = Flask(__name__)
 
-#configuração de logs
-logging.basicConfig(filename='system.log' , level=logging.INFO,
+# Configuração de logs
+logging.basicConfig(filename='system.log', level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
-
-#uso de logging
-logging.info('aplicação iniciada')
+logging.info('Aplicação iniciada')
 
 # Configuração do banco de dados
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SECRET_KEY'] = 'your_secret_key'
 app.config['UPLOAD_FOLDER'] = 'static/imagens'
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)#inicializa Flask-Migrate
+migrate = Migrate(app, db)
 
-#configuração do login
+# Configuração do login
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-#modelo de usuario
-
+# Modelo de usuário
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
+    anuncios = db.relationship('Anuncio', backref='author', lazy=True)
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
     def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
+        return check_password_hash(self.password, password)
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-
-# Modelo de dados
+# Modelo de anúncio
 class Anuncio(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    titulo = db.Column(db.String(100),  nullable=False)
+    titulo = db.Column(db.String(100), nullable=False)
     descricao = db.Column(db.Text, nullable=False)
     preco = db.Column(db.Float, nullable=False)
-    foto = db.Column(db.String(20), nullable=False, default='default.jpg')
+    imagem = db.Column(db.String(100), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-    def __repr__(self):
-        return f"Anuncio('{self.titulo}', '{self.descricao}', '{self.preco}', '{self.foto}')"
+# Criar banco de dados e tabelas
+with app.app_context():
+    db.create_all()
 
-# Rotas
-
-@app.route('/register', methods=['GET','POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    if request.methode == 'POST':
-        username = request.form.get['username']
-        email = request.form.get['email']
-        password = request.form.get['password']
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        hashed_password = generate_password_hash(password, method='sha256')
 
-        #verifica se o usuario ja existe
-        if Usuario.query.filter_by(username=username).first():
-            flash('Username já existe. Por favor, escolha outro.', 'danger')
-            return redirect(url_for('register'))
-        
-        #criar o novo usuario
-        novo_usuario = Usuario(username=username, email=email)
-        novo_usuario.set_password(password)
-        db.session.add(novo_usuario)
+        new_user = User(username=username, email=email, password=hashed_password)
+        db.session.add(new_user)
         db.session.commit()
 
-        flash('Registro bem-sucedido! Você pode fazer login agora.','sucess')
+        flash('Registration successful. Please log in.', 'success')
         return redirect(url_for('login'))
-    
     return render_template('register.html')
 
-@app.route('/login', methods=['GET','POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form.get['username']
-        password = request.form.get['password']
+        username = request.form.get('username')
+        password = request.form.get('password')
+        user = User.query.filter_by(username=username).first()
 
-        usuario = Usuario.query.filter_by(username=username).first()
-
-        if usuario is None or not usuario.check_password(password):
-            flash('Nome de usuario ou senha incorretos.','danger')
-            return redirect(url_for('login'))
-        
-        login_user(usuario)
-        flash('Login bem-sucedido!', 'sucess')
-        return redirect(url_for('listar_anuncios'))
-    
+        if user and check_password_hash(user.password, password):
+            login_user(user)
+            return redirect(url_for('anuncios'))
+        else:
+            flash('Login Unsuccessful. Please check your username and password', 'danger')
     return render_template('login.html')
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    flash('Você foi desconectado.','info')
     return redirect(url_for('login'))
-
-
-@app.route('/')
-def index():
-    return 'Olá, mundo! Este é o meu clone da OLX.'
-
-@app.route('/anuncios')
-def listar_anuncios():
-    anuncios = Anuncio.query.all()
-    return render_template('anuncios.html', anuncios=anuncios)
-
-@app.route('/test')
-def test():
-    return 'Teste de rota'
-
-@app.route('/criar_anuncio', methods=['GET', 'POST'])
-def criar_anuncio():
-    if request.method == 'POST':
-        titulo = request.form['titulo']
-        descricao = request.form['descricao']
-        preco = request.form['preco']
-        foto = None
-
-        if 'foto' in request.files:
-            arquivo = request.files['foto']
-            if arquivo.filename != '':
-                foto = salvar_imagem(arquivo)
-
-        novo_anuncio = Anuncio(titulo=titulo, descricao=descricao, preco=preco, foto=foto)
-        try:
-            db.session.add(novo_anuncio)
-            db.session.commit()
-            logging.info(f'Anuncio criado: {titulo}')
-            return redirect(url_for('listar_anuncios'))
-        except IntegrityError:
-            db.session.rollback()
-            alerta = 'Já existe um anúncio com esse título'
-            return render_template('criar_anuncio.html', alerta=alerta)
-
-    return render_template('criar_anuncio.html')
-
-
-@app.route('/editar_anuncio/<int:id>', methods=['GET', 'POST'])
-def editar_anuncio(id):
-    anuncio = Anuncio.query.get_or_404(id)
-    if request.method == 'POST':
-        anuncio.titulo = request.form['titulo']
-        anuncio.descricao = request.form['descricao']
-        anuncio.preco = request.form['preco']
-        
-        if 'foto' in request.files:
-            arquivo = request.files['foto']
-            if arquivo.filename != '':
-                anuncio.foto = salvar_imagem(arquivo)
-
-        try:
-            db.session.commit()
-            return redirect(url_for('listar_anuncios'))
-        except IntegrityError:
-            db.session.rollback()
-            alerta = 'Já existe um anúncio com esse título'
-            return render_template('editar_anuncio.html', anuncio=anuncio, alerta=alerta)
-
-    return render_template('editar_anuncio.html', anuncio=anuncio)
-
-
-
-@app.route('/deletar_anuncio/<int:id>', methods=['POST'])
-def deletar_anuncio(id):
-    anuncio = Anuncio.query.get_or_404(id)
-    db.session.delete(anuncio)
-    db.session.commit()
-    return redirect(url_for('listar_anuncios'))
-
-@app.route('/gerenciar_anuncios')
-def gerenciar_anuncios():
-    anuncios = Anuncio.query.all()
-    return render_template('gerenciar_anuncios.html', anuncios=anuncios)
 
 @app.route('/ver_logs')
 def ver_logs():
@@ -201,6 +107,11 @@ def ver_logs():
 @app.route('/controle')
 def controle():
     return render_template('controle.html')
+
+@app.route('/anuncios')
+def listar_anuncios():
+    anuncios = Anuncio.query.all()
+    return render_template('anuncios.html', anuncios=anuncios)
 
 if __name__ == '__main__':
     app.run(debug=True)

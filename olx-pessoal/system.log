@@ -1401,3 +1401,95 @@
 2024-07-05 14:09:16,176 - INFO -  * Debugger PIN: 868-883-576
 2024-07-05 14:09:17,300 - WARNING -  * Debugger is active!
 2024-07-05 14:09:17,301 - INFO -  * Debugger PIN: 868-883-576
+2024-07-05 15:24:24,244 - INFO - aplicação iniciada
+2024-07-05 15:24:24,543 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-07-05 15:24:24,543 - INFO - [33mPress CTRL+C to quit[0m
+2024-07-05 15:24:24,558 - INFO -  * Restarting with stat
+2024-07-05 15:24:25,279 - INFO - aplicação iniciada
+2024-07-05 15:24:25,307 - WARNING -  * Debugger is active!
+2024-07-05 15:24:25,327 - INFO -  * Debugger PIN: 868-883-576
+2024-07-05 15:24:42,971 - INFO - 127.0.0.1 - - [05/Jul/2024 15:24:42] "GET /criar_anuncio HTTP/1.1" 200 -
+2024-07-05 15:45:38,842 - INFO - 127.0.0.1 - - [05/Jul/2024 15:45:38] "GET /controle HTTP/1.1" 200 -
+2024-07-05 15:45:40,811 - INFO - 127.0.0.1 - - [05/Jul/2024 15:45:40] "GET /ver_logs HTTP/1.1" 200 -
+2024-07-05 16:49:50,779 - WARNING -  * Debugger is active!
+2024-07-05 16:49:50,779 - INFO -  * Debugger PIN: 868-883-576
+2024-07-05 16:49:51,237 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-07-05 16:49:51,238 - INFO - [33mPress CTRL+C to quit[0m
+2024-07-05 16:49:51,240 - INFO -  * Restarting with stat
+2024-07-08 15:48:24,530 - INFO - aplicação iniciada
+2024-07-08 15:48:24,843 - ERROR - Error: Directory migrations already exists and is not empty
+2024-07-08 15:49:09,593 - INFO - aplicação iniciada
+2024-07-08 15:49:28,381 - INFO - aplicação iniciada
+2024-07-08 15:51:28,240 - INFO - aplicação iniciada
+2024-07-08 16:30:21,832 - INFO - aplicação iniciada
+2024-07-08 17:13:15,710 - INFO - aplicação iniciada
+2024-07-08 17:14:00,804 - INFO - aplicação iniciada
+2024-07-08 17:14:01,034 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-07-08 17:14:01,034 - INFO - [33mPress CTRL+C to quit[0m
+2024-07-08 17:14:01,042 - INFO -  * Restarting with stat
+2024-07-08 17:14:01,815 - INFO - aplicação iniciada
+2024-07-08 17:14:01,844 - WARNING -  * Debugger is active!
+2024-07-08 17:14:01,872 - INFO -  * Debugger PIN: 868-883-576
+2024-07-08 17:14:20,708 - INFO - 127.0.0.1 - - [08/Jul/2024 17:14:20] "[35m[1mGET /anuncios HTTP/1.1[0m" 500 -
+2024-07-08 17:14:21,196 - INFO - 127.0.0.1 - - [08/Jul/2024 17:14:21] "GET /anuncios?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2024-07-08 17:14:21,201 - INFO - 127.0.0.1 - - [08/Jul/2024 17:14:21] "GET /anuncios?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2024-07-08 17:14:21,563 - INFO - 127.0.0.1 - - [08/Jul/2024 17:14:21] "GET /anuncios?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2024-07-08 17:14:21,823 - INFO - 127.0.0.1 - - [08/Jul/2024 17:14:21] "[36mGET /anuncios?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-07-08 17:22:36,887 - INFO -  * Detected change in 'F:\\pasta-projetos\\pastaprojetos\\pasta-projetos\\olx-pessoal\\app.py', reloading
+2024-07-08 17:22:37,113 - INFO -  * Restarting with stat
+2024-07-08 17:22:38,177 - INFO - Aplicação iniciada
+2024-07-08 17:22:38,231 - WARNING -  * Debugger is active!
+2024-07-08 17:22:38,237 - INFO -  * Debugger PIN: 868-883-576
+2024-07-08 17:22:46,251 - WARNING -  * Debugger is active!
+2024-07-08 17:22:46,251 - INFO -  * Debugger PIN: 868-883-576
+2024-07-08 17:22:46,453 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-07-08 17:22:46,453 - INFO - [33mPress CTRL+C to quit[0m
+2024-07-08 17:22:46,453 - INFO -  * Restarting with stat
+2024-07-08 17:22:47,220 - INFO - Aplicação iniciada
+2024-07-08 17:22:47,247 - WARNING -  * Debugger is active!
+2024-07-08 17:22:47,250 - INFO -  * Debugger PIN: 868-883-576
+2024-07-08 17:22:49,346 - WARNING -  * Debugger is active!
+2024-07-08 17:22:49,346 - INFO -  * Debugger PIN: 868-883-576
+2024-07-08 17:23:06,562 - INFO - Aplicação iniciada
+2024-07-08 17:23:06,589 - ERROR - Error: Directory migrations already exists and is not empty
+2024-07-08 17:23:35,011 - INFO - Aplicação iniciada
+2024-07-08 17:24:00,853 - INFO - Aplicação iniciada
+2024-07-08 17:26:03,674 - INFO - Aplicação iniciada
+2024-07-08 17:26:15,656 - INFO - Aplicação iniciada
+2024-07-08 17:26:31,068 - INFO - Aplicação iniciada
+2024-07-08 17:26:51,320 - INFO - Aplicação iniciada
+2024-07-08 17:30:36,166 - INFO - Aplicação iniciada
+2024-07-08 17:36:07,822 - INFO - Aplicação iniciada
+2024-07-09 13:27:36,115 - INFO - Aplicação iniciada
+2024-07-09 13:27:36,432 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-07-09 13:27:36,432 - INFO - [33mPress CTRL+C to quit[0m
+2024-07-09 13:27:36,439 - INFO -  * Restarting with stat
+2024-07-09 13:27:37,159 - INFO - Aplicação iniciada
+2024-07-09 13:27:37,188 - WARNING -  * Debugger is active!
+2024-07-09 13:27:37,221 - INFO -  * Debugger PIN: 868-883-576
+2024-07-09 13:27:59,933 - INFO - 127.0.0.1 - - [09/Jul/2024 13:27:59] "[35m[1mGET /anuncios HTTP/1.1[0m" 500 -
+2024-07-09 13:28:00,398 - INFO - 127.0.0.1 - - [09/Jul/2024 13:28:00] "GET /anuncios?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2024-07-09 13:28:00,410 - INFO - 127.0.0.1 - - [09/Jul/2024 13:28:00] "GET /anuncios?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2024-07-09 13:28:00,822 - INFO - 127.0.0.1 - - [09/Jul/2024 13:28:00] "[36mGET /anuncios?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-07-09 13:28:34,874 - WARNING -  * Debugger is active!
+2024-07-09 13:28:34,874 - INFO -  * Debugger PIN: 868-883-576
+2024-07-09 13:28:35,072 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-07-09 13:28:35,072 - INFO - [33mPress CTRL+C to quit[0m
+2024-07-09 13:28:35,072 - INFO -  * Restarting with stat
+2024-07-09 13:28:35,928 - INFO - Aplicação iniciada
+2024-07-09 13:28:35,977 - WARNING -  * Debugger is active!
+2024-07-09 13:28:35,982 - INFO -  * Debugger PIN: 868-883-576
+2024-07-09 13:28:36,225 - WARNING -  * Debugger is active!
+2024-07-09 13:28:36,225 - INFO -  * Debugger PIN: 868-883-576
+2024-07-09 13:28:46,131 - INFO - Aplicação iniciada
+2024-07-09 13:32:31,222 - INFO - Aplicação iniciada
+2024-07-09 13:33:02,271 - INFO - Aplicação iniciada
+2024-07-09 13:33:06,599 - INFO - Aplicação iniciada
+2024-07-09 13:33:30,841 - INFO - Aplicação iniciada
+2024-07-09 13:33:50,221 - INFO - Aplicação iniciada

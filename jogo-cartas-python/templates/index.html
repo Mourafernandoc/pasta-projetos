@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jogo de Cartas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #resultado, #placar {
+            margin-top: 20px;
+        }
+        #restart-batalha {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bem-vindo ao Jogo de Cartas!</h1>
+    <div id="mao-jogador1">
+        <!-- Cartas do Jogador 1 serão listadas aqui -->
+    </div>
+    <button id="iniciar-batalha">Iniciar Batalha</button>
+    <button id="restart-batalha">Reiniciar Batalha</button>
+
+    <div id="resultado"></div>
+    <div id="placar">
+        <h2>Placar</h2>
+        <p>Jogador 1: <span id="pontos-jogador1">0</span></p>
+        <p>Jogador 2: <span id="pontos-jogador2">0</span></p>
+    </div>
+
+    <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+        var pontosJogador1 = 0;
+        var pontosJogador2 = 0;
+
+        // Função para atualizar a lista de cartas na mão do jogador
+        function atualizarCartas(cartas) {
+            $('#mao-jogador1').empty();
+            cartas.jogador1.forEach(function(carta) {
+                $('#mao-jogador1').append(
+                    '<input type="radio" name="carta" value="' + carta + '">' + carta + '<br>'
+                );
+            });
+        }
+
+        // Clique para iniciar a batalha
+        $('#iniciar-batalha').on('click', function() {
+            var cartaSelecionada = $('#mao-jogador1').find('input[name="carta"]:checked').val();
+            if (cartaSelecionada) {
+                socket.emit('iniciar_batalha', { carta: cartaSelecionada });
+            } else {
+                alert('Por favor, selecione uma carta para iniciar a batalha.');
+            }
+        });
+
+        // Clique para reiniciar a batalha
+        $('#restart-batalha').on('click', function() {
+            socket.emit('reiniciar_batalha');
+            $('#resultado').empty();
+            $(this).hide();
+        });
+
+        // Recebe resultado da batalha do servidor
+        socket.on('resultado_batalha', function(data) {
+            $('#resultado').html(
+                '<p>' + data.carta1 + ' VS ' + data.carta2 + '</p>' +
+                '<p>Resultado: ' + data.resultado + '</p>'
+            );
+            atualizarCartas(data.cartas);
+
+            // Atualizar o placar
+            if (data.vencedor == "Jogador 1") {
+                pontosJogador1++;
+                $('#pontos-jogador1').text(pontosJogador1);
+            } else if (data.vencedor == "Jogador 2") {
+                pontosJogador2++;
+                $('#pontos-jogador2').text(pontosJogador2);
+            }
+
+            // Mostrar botão de reinício
+            $('#restart-batalha').show();
+        });
+
+        // Recebe cartas iniciais do servidor ao carregar a página
+        socket.on('cartas_iniciais', function(data) {
+            atualizarCartas(data.cartas);
+        });
+    </script>
+</body>
+</html>

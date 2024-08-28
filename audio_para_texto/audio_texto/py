@@ -1,0 +1,58 @@
+import tkinter as tk
+from tkinter import filedialog, messagebox
+import speech_recognition as sr
+from pydub import AudioSegment
+
+def transcribe_audio(file_path, save_path):
+    if file_path.endswith('.mp3'):
+        audio = AudioSegment.from_mp3(file_path)
+        file_path = file_path.replace('.mp3', '.wav')
+        audio.export(file_path, format='wav')
+
+    recognizer = sr.Recognizer()
+    
+    with sr.AudioFile(file_path) as source:
+        audio_data = source.record(source)
+        try:
+            text = recognizer.recognize_google(audio_data, language='pt-BR')
+            with open(save_path, 'w') as file:
+                file.write(text)
+            messagebox.showinfo("Sucesso", "Transcrição concluída e salva com sucesso.")
+        except sr.UnknownValueError:
+            messagebox.showerror("Erro", "Não foi possível entender o áudio.")
+        except sr.RequestError as e:
+            messagebox.showerror("Erro", f"Erro ao solicitar resultados do serviço de reconhecimento de fala: {e}")
+
+def browse_audio_file():
+    file_path = filedialog.askopenfilename(filetypes=[("Audio Files", "*.mp3 *.wav")])
+    audio_file_entry.delete(0, tk.END)
+    audio_file_entry.insert(0, file_path)
+
+def browse_save_location():
+    save_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text Files", "*.txt")])
+    save_file_entry.delete(0, tk.END)
+    save_file_entry.insert(0, save_path)
+
+def start_transcription():
+    audio_file = audio_file_entry.get()
+    save_file = save_file_entry.get()
+    if audio_file and save_file:
+        transcribe_audio(audio_file, save_file)
+    else:
+        messagebox.showwarning("Aviso", "Por favor, selecione um arquivo de áudio e um local para salvar o texto.")
+
+# Configurar interface gráfica
+root = tk.Tk()
+root.title("Transcrição de Áudio")
+
+tk.Label(root, text="Selecione o arquivo de áudio:").grid(row=0, column=0, padx=10, pady=10)
+audio_file_entry = tk.Entry(root, width=50)
+audio_file_entry.grid(row=0, column=1, padx=10, pady=10)
+tk.Button(root, text="Procurar", command=browse_audio_file).grid(row=0, column=2, padx=10, pady=10)
+
+tk.Label(root, text="Selecione o local para salvar o texto:").grid(row=1, column=0, padx=10, pady=10)
+save_file_entry = tk.Entry(root, width=50)
+save_file_entry.grid(row=1, column=1, padx=10, pady=10)
+tk.Button(root, text="Procurar", command=browse_save_location).grid(row=1, column=2, padx=10, pady=10)
+
+tk.Button(root, text="Iniciar Transcrição", command=start_transcription).grid(row=2, column=1)
