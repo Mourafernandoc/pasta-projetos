@@ -1,20 +1,9 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Jogo de Cartas</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        #resultado, #placar {
-            margin-top: 20px;
-        }
-        #restart-batalha {
-            display: none;
-        }
-    </style>
 </head>
 <body>
     <h1>Bem-vindo ao Jogo de Cartas!</h1>
@@ -35,10 +24,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
     <script>
         var socket = io.connect('http://' + document.domain + ':' + location.port);
-        var pontosJogador1 = 0;
-        var pontosJogador2 = 0;
 
-        // Função para atualizar a lista de cartas na mão do jogador
         function atualizarCartas(cartas) {
             $('#mao-jogador1').empty();
             cartas.jogador1.forEach(function(carta) {
@@ -46,9 +32,13 @@
                     '<input type="radio" name="carta" value="' + carta + '">' + carta + '<br>'
                 );
             });
+
+            if (cartas.jogador1.length === 0) {
+                $('#mao-jogador1').html('<p>Sem cartas restantes</p>');
+                $('#iniciar-batalha').prop('disabled', true);  // Desabilitar botão
+            }
         }
 
-        // Clique para iniciar a batalha
         $('#iniciar-batalha').on('click', function() {
             var cartaSelecionada = $('#mao-jogador1').find('input[name="carta"]:checked').val();
             if (cartaSelecionada) {
@@ -58,35 +48,29 @@
             }
         });
 
-        // Clique para reiniciar a batalha
         $('#restart-batalha').on('click', function() {
             socket.emit('reiniciar_batalha');
             $('#resultado').empty();
-            $(this).hide();
+            $('#pontos-jogador1').text(0);
+            $('#pontos-jogador2').text(0);
+            $('#iniciar-batalha').prop('disabled', false);  // Reativar botão ao reiniciar
         });
 
-        // Recebe resultado da batalha do servidor
         socket.on('resultado_batalha', function(data) {
             $('#resultado').html(
                 '<p>' + data.carta1 + ' VS ' + data.carta2 + '</p>' +
                 '<p>Resultado: ' + data.resultado + '</p>'
             );
             atualizarCartas(data.cartas);
-
-            // Atualizar o placar
-            if (data.vencedor == "Jogador 1") {
-                pontosJogador1++;
-                $('#pontos-jogador1').text(pontosJogador1);
-            } else if (data.vencedor == "Jogador 2") {
-                pontosJogador2++;
-                $('#pontos-jogador2').text(pontosJogador2);
-            }
-
-            // Mostrar botão de reinício
-            $('#restart-batalha').show();
+            $('#pontos-jogador1').text(data.placar.jogador1);
+            $('#pontos-jogador2').text(data.placar.jogador2);
         });
 
-        // Recebe cartas iniciais do servidor ao carregar a página
+        socket.on('fim_batalha', function(data) {
+            $('#resultado').html('<h2>' + data.mensagem + '</h2>');
+            $('#iniciar-batalha').prop('disabled', true);  // Desabilitar botão quando a batalha acabar
+        });
+
         socket.on('cartas_iniciais', function(data) {
             atualizarCartas(data.cartas);
         });
